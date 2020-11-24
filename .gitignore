@@ -1,7 +1,10 @@
 .settings/
-Debug/
-Startup/
+Debug/Src/
+Debug/Startup/
+Debug/objects.list
+*.bin
+*makefile
+*.mk
 *.cproject
 *.project
 *.launch
-*.ld
