@@ -1,6 +1,6 @@
 .settings/
-Debug/Src/
-Debug/Startup/
+Debug/Src
+Debug/Startup
 objects.list
 *.bin
 *makefile
