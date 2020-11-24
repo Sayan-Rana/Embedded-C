@@ -2,6 +2,8 @@
 *.d
 *.o
 *.su
+*.s
+Startup/
 objects.list
 *.bin
 *makefile
