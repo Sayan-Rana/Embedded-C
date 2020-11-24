@@ -1,7 +1,7 @@
 .settings/
 Debug/Src/
 Debug/Startup/
-Debug/objects.list
+objects.list
 *.bin
 *makefile
 *.mk
