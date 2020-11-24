@@ -1,0 +1,7 @@
+.settings/
+Debug/
+Startup/
+*.cproject
+*.project
+*.launch
+*.ld
