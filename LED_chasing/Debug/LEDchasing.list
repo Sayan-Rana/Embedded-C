@@ -1,0 +1,1342 @@
+
+LEDchasing.elf:     file format elf32-littlearm
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .isr_vector   000001a8  08000000  08000000  00010000  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  1 .text         000008f4  080001a8  080001a8  000101a8  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .rodata       00000000  08000a9c  08000aa4  00010aa4  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  3 .ARM.extab    00000000  08000a9c  08000a9c  00010aa4  2**0
+                  CONTENTS
+  4 .ARM          00000000  08000a9c  08000a9c  00010aa4  2**0
+                  CONTENTS
+  5 .preinit_array 00000000  08000a9c  08000aa4  00010aa4  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  6 .init_array   00000004  08000a9c  08000a9c  00010a9c  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  7 .fini_array   00000004  08000aa0  08000aa0  00010aa0  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  8 .data         00000000  20000000  20000000  00010aa4  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  9 .bss          0000001c  20000000  08000aa4  00020000  2**2
+                  ALLOC
+ 10 ._user_heap_stack 00000604  2000001c  08000aa4  0002001c  2**0
+                  ALLOC
+ 11 .ARM.attributes 00000030  00000000  00000000  00010aa4  2**0
+                  CONTENTS, READONLY
+ 12 .debug_info   0000058e  00000000  00000000  00010ad4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 13 .debug_abbrev 00000146  00000000  00000000  00011062  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 14 .debug_aranges 00000070  00000000  00000000  000111a8  2**3
+                  CONTENTS, READONLY, DEBUGGING
+ 15 .debug_ranges 00000058  00000000  00000000  00011218  2**3
+                  CONTENTS, READONLY, DEBUGGING
+ 16 .debug_macro  00000f0c  00000000  00000000  00011270  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 17 .debug_line   00000578  00000000  00000000  0001217c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 18 .debug_str    00003cf3  00000000  00000000  000126f4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 19 .comment      0000007b  00000000  00000000  000163e7  2**0
+                  CONTENTS, READONLY
+ 20 .debug_frame  00000104  00000000  00000000  00016464  2**2
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+080001a8 <__do_global_dtors_aux>:
+ 80001a8:	b510      	push	{r4, lr}
+ 80001aa:	4c05      	ldr	r4, [pc, #20]	; (80001c0 <__do_global_dtors_aux+0x18>)
+ 80001ac:	7823      	ldrb	r3, [r4, #0]
+ 80001ae:	b933      	cbnz	r3, 80001be <__do_global_dtors_aux+0x16>
+ 80001b0:	4b04      	ldr	r3, [pc, #16]	; (80001c4 <__do_global_dtors_aux+0x1c>)
+ 80001b2:	b113      	cbz	r3, 80001ba <__do_global_dtors_aux+0x12>
+ 80001b4:	4804      	ldr	r0, [pc, #16]	; (80001c8 <__do_global_dtors_aux+0x20>)
+ 80001b6:	f3af 8000 	nop.w
+ 80001ba:	2301      	movs	r3, #1
+ 80001bc:	7023      	strb	r3, [r4, #0]
+ 80001be:	bd10      	pop	{r4, pc}
+ 80001c0:	20000000 	.word	0x20000000
+ 80001c4:	00000000 	.word	0x00000000
+ 80001c8:	08000a84 	.word	0x08000a84
+
+080001cc <frame_dummy>:
+ 80001cc:	b508      	push	{r3, lr}
+ 80001ce:	4b03      	ldr	r3, [pc, #12]	; (80001dc <frame_dummy+0x10>)
+ 80001d0:	b11b      	cbz	r3, 80001da <frame_dummy+0xe>
+ 80001d2:	4903      	ldr	r1, [pc, #12]	; (80001e0 <frame_dummy+0x14>)
+ 80001d4:	4803      	ldr	r0, [pc, #12]	; (80001e4 <frame_dummy+0x18>)
+ 80001d6:	f3af 8000 	nop.w
+ 80001da:	bd08      	pop	{r3, pc}
+ 80001dc:	00000000 	.word	0x00000000
+ 80001e0:	20000004 	.word	0x20000004
+ 80001e4:	08000a84 	.word	0x08000a84
+
+080001e8 <delay>:
+
+void RVS_seq();
+void FWD_seq();
+void top_to_bottom();
+void side_seq();
+void delay(void){
+ 80001e8:	b480      	push	{r7}
+ 80001ea:	b083      	sub	sp, #12
+ 80001ec:	af00      	add	r7, sp, #0
+
+	for(uint32_t i = 0 ; i < 100000 ; i++);
+ 80001ee:	2300      	movs	r3, #0
+ 80001f0:	607b      	str	r3, [r7, #4]
+ 80001f2:	e002      	b.n	80001fa <delay+0x12>
+ 80001f4:	687b      	ldr	r3, [r7, #4]
+ 80001f6:	3301      	adds	r3, #1
+ 80001f8:	607b      	str	r3, [r7, #4]
+ 80001fa:	687b      	ldr	r3, [r7, #4]
+ 80001fc:	4a04      	ldr	r2, [pc, #16]	; (8000210 <delay+0x28>)
+ 80001fe:	4293      	cmp	r3, r2
+ 8000200:	d9f8      	bls.n	80001f4 <delay+0xc>
+}
+ 8000202:	bf00      	nop
+ 8000204:	370c      	adds	r7, #12
+ 8000206:	46bd      	mov	sp, r7
+ 8000208:	f85d 7b04 	ldr.w	r7, [sp], #4
+ 800020c:	4770      	bx	lr
+ 800020e:	bf00      	nop
+ 8000210:	0001869f 	.word	0x0001869f
+
+08000214 <main>:
+
+int main(void)
+{
+ 8000214:	b580      	push	{r7, lr}
+ 8000216:	b082      	sub	sp, #8
+ 8000218:	af00      	add	r7, sp, #0
+
+	/* 1. Enabling GPIOD by enabling clock */
+	pClkCtrlReg->gpioD_en = 0X01;
+ 800021a:	4a38      	ldr	r2, [pc, #224]	; (80002fc <main+0xe8>)
+ 800021c:	6813      	ldr	r3, [r2, #0]
+ 800021e:	f043 0308 	orr.w	r3, r3, #8
+ 8000222:	6013      	str	r3, [r2, #0]
+
+	//2. Enabling PD0,PD1,PD2,PD3,PD8,PD9,PD10,PD11 as output mode.
+	pPortDModeReg->pin_0  = 0X01;  // PD0 as R0
+ 8000224:	4a36      	ldr	r2, [pc, #216]	; (8000300 <main+0xec>)
+ 8000226:	6813      	ldr	r3, [r2, #0]
+ 8000228:	2101      	movs	r1, #1
+ 800022a:	f361 0301 	bfi	r3, r1, #0, #2
+ 800022e:	6013      	str	r3, [r2, #0]
+	pPortDModeReg->pin_1  = 0X01;  // PD1 as R1
+ 8000230:	4a33      	ldr	r2, [pc, #204]	; (8000300 <main+0xec>)
+ 8000232:	6813      	ldr	r3, [r2, #0]
+ 8000234:	2101      	movs	r1, #1
+ 8000236:	f361 0383 	bfi	r3, r1, #2, #2
+ 800023a:	6013      	str	r3, [r2, #0]
+	pPortDModeReg->pin_2  = 0X01;  // PD2 as R2
+ 800023c:	4a30      	ldr	r2, [pc, #192]	; (8000300 <main+0xec>)
+ 800023e:	6813      	ldr	r3, [r2, #0]
+ 8000240:	2101      	movs	r1, #1
+ 8000242:	f361 1305 	bfi	r3, r1, #4, #2
+ 8000246:	6013      	str	r3, [r2, #0]
+	pPortDModeReg->pin_3  = 0X01;  // PD3 as R3
+ 8000248:	4a2d      	ldr	r2, [pc, #180]	; (8000300 <main+0xec>)
+ 800024a:	6813      	ldr	r3, [r2, #0]
+ 800024c:	2101      	movs	r1, #1
+ 800024e:	f361 1387 	bfi	r3, r1, #6, #2
+ 8000252:	6013      	str	r3, [r2, #0]
+
+	pPortDModeReg->pin_8  = 0X01;   // PD8  as C0
+ 8000254:	4a2a      	ldr	r2, [pc, #168]	; (8000300 <main+0xec>)
+ 8000256:	6813      	ldr	r3, [r2, #0]
+ 8000258:	2101      	movs	r1, #1
+ 800025a:	f361 4311 	bfi	r3, r1, #16, #2
+ 800025e:	6013      	str	r3, [r2, #0]
+	pPortDModeReg->pin_9  = 0X01;   // PD9  as C1
+ 8000260:	4a27      	ldr	r2, [pc, #156]	; (8000300 <main+0xec>)
+ 8000262:	6813      	ldr	r3, [r2, #0]
+ 8000264:	2101      	movs	r1, #1
+ 8000266:	f361 4393 	bfi	r3, r1, #18, #2
+ 800026a:	6013      	str	r3, [r2, #0]
+	pPortDModeReg->pin_10 = 0X01;   // PD10 as C2
+ 800026c:	4a24      	ldr	r2, [pc, #144]	; (8000300 <main+0xec>)
+ 800026e:	6813      	ldr	r3, [r2, #0]
+ 8000270:	2101      	movs	r1, #1
+ 8000272:	f361 5315 	bfi	r3, r1, #20, #2
+ 8000276:	6013      	str	r3, [r2, #0]
+	pPortDModeReg->pin_11 = 0X01;   // PD11 as C3
+ 8000278:	4a21      	ldr	r2, [pc, #132]	; (8000300 <main+0xec>)
+ 800027a:	6813      	ldr	r3, [r2, #0]
+ 800027c:	2101      	movs	r1, #1
+ 800027e:	f361 5397 	bfi	r3, r1, #22, #2
+ 8000282:	6013      	str	r3, [r2, #0]
+
+
+	//3. Set PD0 to PD3 LOW and PD8 to PD11 HIGH.
+	pPortDOutReg->pin_0  = 0X00;  //R0 - PD0
+ 8000284:	4a1f      	ldr	r2, [pc, #124]	; (8000304 <main+0xf0>)
+ 8000286:	6813      	ldr	r3, [r2, #0]
+ 8000288:	f36f 0300 	bfc	r3, #0, #1
+ 800028c:	6013      	str	r3, [r2, #0]
+	pPortDOutReg->pin_1  = 0X00;  //R1 - PD1
+ 800028e:	4a1d      	ldr	r2, [pc, #116]	; (8000304 <main+0xf0>)
+ 8000290:	6813      	ldr	r3, [r2, #0]
+ 8000292:	f36f 0341 	bfc	r3, #1, #1
+ 8000296:	6013      	str	r3, [r2, #0]
+	pPortDOutReg->pin_2  = 0X00;  //R2 - PD2
+ 8000298:	4a1a      	ldr	r2, [pc, #104]	; (8000304 <main+0xf0>)
+ 800029a:	6813      	ldr	r3, [r2, #0]
+ 800029c:	f36f 0382 	bfc	r3, #2, #1
+ 80002a0:	6013      	str	r3, [r2, #0]
+	pPortDOutReg->pin_3  = 0X00;  //R3 - PD3
+ 80002a2:	4a18      	ldr	r2, [pc, #96]	; (8000304 <main+0xf0>)
+ 80002a4:	6813      	ldr	r3, [r2, #0]
+ 80002a6:	f36f 03c3 	bfc	r3, #3, #1
+ 80002aa:	6013      	str	r3, [r2, #0]
+
+	pPortDOutReg->pin_8  = 0X01;  //C0 - PD8
+ 80002ac:	4a15      	ldr	r2, [pc, #84]	; (8000304 <main+0xf0>)
+ 80002ae:	6813      	ldr	r3, [r2, #0]
+ 80002b0:	f443 7380 	orr.w	r3, r3, #256	; 0x100
+ 80002b4:	6013      	str	r3, [r2, #0]
+	pPortDOutReg->pin_9  = 0X01;  //C1 - PD9
+ 80002b6:	4a13      	ldr	r2, [pc, #76]	; (8000304 <main+0xf0>)
+ 80002b8:	6813      	ldr	r3, [r2, #0]
+ 80002ba:	f443 7300 	orr.w	r3, r3, #512	; 0x200
+ 80002be:	6013      	str	r3, [r2, #0]
+	pPortDOutReg->pin_10 = 0X01;  //C2 - PD10
+ 80002c0:	4a10      	ldr	r2, [pc, #64]	; (8000304 <main+0xf0>)
+ 80002c2:	6813      	ldr	r3, [r2, #0]
+ 80002c4:	f443 6380 	orr.w	r3, r3, #1024	; 0x400
+ 80002c8:	6013      	str	r3, [r2, #0]
+	pPortDOutReg->pin_11 = 0X01;  //C3 - PD11
+ 80002ca:	4a0e      	ldr	r2, [pc, #56]	; (8000304 <main+0xf0>)
+ 80002cc:	6813      	ldr	r3, [r2, #0]
+ 80002ce:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 80002d2:	6013      	str	r3, [r2, #0]
+
+	uint8_t count1 = 0;
+ 80002d4:	2300      	movs	r3, #0
+ 80002d6:	71fb      	strb	r3, [r7, #7]
+	while(1){
+		count1 = 0;
+ 80002d8:	2300      	movs	r3, #0
+ 80002da:	71fb      	strb	r3, [r7, #7]
+		while(count1 <= 2){
+ 80002dc:	e006      	b.n	80002ec <main+0xd8>
+
+			FWD_seq();
+ 80002de:	f000 f813 	bl	8000308 <FWD_seq>
+			RVS_seq();
+ 80002e2:	f000 f91f 	bl	8000524 <RVS_seq>
+			count1++;
+ 80002e6:	79fb      	ldrb	r3, [r7, #7]
+ 80002e8:	3301      	adds	r3, #1
+ 80002ea:	71fb      	strb	r3, [r7, #7]
+		while(count1 <= 2){
+ 80002ec:	79fb      	ldrb	r3, [r7, #7]
+ 80002ee:	2b02      	cmp	r3, #2
+ 80002f0:	d9f5      	bls.n	80002de <main+0xca>
+		}
+		top_to_bottom();
+ 80002f2:	f000 fa25 	bl	8000740 <top_to_bottom>
+		side_seq();
+ 80002f6:	f000 facd 	bl	8000894 <side_seq>
+		count1 = 0;
+ 80002fa:	e7ed      	b.n	80002d8 <main+0xc4>
+ 80002fc:	40023830 	.word	0x40023830
+ 8000300:	40020c00 	.word	0x40020c00
+ 8000304:	40020c14 	.word	0x40020c14
+
+08000308 <FWD_seq>:
+	}
+}
+
+void FWD_seq(){
+ 8000308:	b580      	push	{r7, lr}
+ 800030a:	af00      	add	r7, sp, #0
+
+				/*Row 0*/
+			pPortDOutReg->pin_0  = 0X01;  //R0 HIGH
+ 800030c:	4a84      	ldr	r2, [pc, #528]	; (8000520 <FWD_seq+0x218>)
+ 800030e:	6813      	ldr	r3, [r2, #0]
+ 8000310:	f043 0301 	orr.w	r3, r3, #1
+ 8000314:	6013      	str	r3, [r2, #0]
+
+			pPortDOutReg->pin_8  = 0X00;  //C0 LOW
+ 8000316:	4a82      	ldr	r2, [pc, #520]	; (8000520 <FWD_seq+0x218>)
+ 8000318:	6813      	ldr	r3, [r2, #0]
+ 800031a:	f36f 2308 	bfc	r3, #8, #1
+ 800031e:	6013      	str	r3, [r2, #0]
+			delay();
+ 8000320:	f7ff ff62 	bl	80001e8 <delay>
+			pPortDOutReg->pin_8  = 0X01;  //C0 HIGH
+ 8000324:	4a7e      	ldr	r2, [pc, #504]	; (8000520 <FWD_seq+0x218>)
+ 8000326:	6813      	ldr	r3, [r2, #0]
+ 8000328:	f443 7380 	orr.w	r3, r3, #256	; 0x100
+ 800032c:	6013      	str	r3, [r2, #0]
+			delay();
+ 800032e:	f7ff ff5b 	bl	80001e8 <delay>
+			pPortDOutReg->pin_9  = 0X00;  //C1 LOW
+ 8000332:	4a7b      	ldr	r2, [pc, #492]	; (8000520 <FWD_seq+0x218>)
+ 8000334:	6813      	ldr	r3, [r2, #0]
+ 8000336:	f36f 2349 	bfc	r3, #9, #1
+ 800033a:	6013      	str	r3, [r2, #0]
+			delay();
+ 800033c:	f7ff ff54 	bl	80001e8 <delay>
+			pPortDOutReg->pin_9  = 0X01;  //C1 HIGH
+ 8000340:	4a77      	ldr	r2, [pc, #476]	; (8000520 <FWD_seq+0x218>)
+ 8000342:	6813      	ldr	r3, [r2, #0]
+ 8000344:	f443 7300 	orr.w	r3, r3, #512	; 0x200
+ 8000348:	6013      	str	r3, [r2, #0]
+			delay();
+ 800034a:	f7ff ff4d 	bl	80001e8 <delay>
+			pPortDOutReg->pin_10 = 0X00;  //C2 LOW
+ 800034e:	4a74      	ldr	r2, [pc, #464]	; (8000520 <FWD_seq+0x218>)
+ 8000350:	6813      	ldr	r3, [r2, #0]
+ 8000352:	f36f 238a 	bfc	r3, #10, #1
+ 8000356:	6013      	str	r3, [r2, #0]
+			delay();
+ 8000358:	f7ff ff46 	bl	80001e8 <delay>
+			pPortDOutReg->pin_10 = 0X01;  //C2 HIGH
+ 800035c:	4a70      	ldr	r2, [pc, #448]	; (8000520 <FWD_seq+0x218>)
+ 800035e:	6813      	ldr	r3, [r2, #0]
+ 8000360:	f443 6380 	orr.w	r3, r3, #1024	; 0x400
+ 8000364:	6013      	str	r3, [r2, #0]
+			delay();
+ 8000366:	f7ff ff3f 	bl	80001e8 <delay>
+			pPortDOutReg->pin_11 = 0X00;  //C3 LOW
+ 800036a:	4a6d      	ldr	r2, [pc, #436]	; (8000520 <FWD_seq+0x218>)
+ 800036c:	6813      	ldr	r3, [r2, #0]
+ 800036e:	f36f 23cb 	bfc	r3, #11, #1
+ 8000372:	6013      	str	r3, [r2, #0]
+			delay();
+ 8000374:	f7ff ff38 	bl	80001e8 <delay>
+			pPortDOutReg->pin_11 = 0X01;  //C3 HIGH
+ 8000378:	4a69      	ldr	r2, [pc, #420]	; (8000520 <FWD_seq+0x218>)
+ 800037a:	6813      	ldr	r3, [r2, #0]
+ 800037c:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 8000380:	6013      	str	r3, [r2, #0]
+			delay();
+ 8000382:	f7ff ff31 	bl	80001e8 <delay>
+			pPortDOutReg->pin_0  = 0X00;  //R0 LOW
+ 8000386:	4a66      	ldr	r2, [pc, #408]	; (8000520 <FWD_seq+0x218>)
+ 8000388:	6813      	ldr	r3, [r2, #0]
+ 800038a:	f36f 0300 	bfc	r3, #0, #1
+ 800038e:	6013      	str	r3, [r2, #0]
+				/*Row 1*/
+			pPortDOutReg->pin_1  = 0X01;  //R1 HIGH
+ 8000390:	4a63      	ldr	r2, [pc, #396]	; (8000520 <FWD_seq+0x218>)
+ 8000392:	6813      	ldr	r3, [r2, #0]
+ 8000394:	f043 0302 	orr.w	r3, r3, #2
+ 8000398:	6013      	str	r3, [r2, #0]
+
+			pPortDOutReg->pin_11 = 0X00;  //C3 LOW
+ 800039a:	4a61      	ldr	r2, [pc, #388]	; (8000520 <FWD_seq+0x218>)
+ 800039c:	6813      	ldr	r3, [r2, #0]
+ 800039e:	f36f 23cb 	bfc	r3, #11, #1
+ 80003a2:	6013      	str	r3, [r2, #0]
+			delay();
+ 80003a4:	f7ff ff20 	bl	80001e8 <delay>
+			pPortDOutReg->pin_11 = 0X01;  //C3 HIGH
+ 80003a8:	4a5d      	ldr	r2, [pc, #372]	; (8000520 <FWD_seq+0x218>)
+ 80003aa:	6813      	ldr	r3, [r2, #0]
+ 80003ac:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 80003b0:	6013      	str	r3, [r2, #0]
+			delay();
+ 80003b2:	f7ff ff19 	bl	80001e8 <delay>
+			pPortDOutReg->pin_10 = 0X00;  //C2 LOW
+ 80003b6:	4a5a      	ldr	r2, [pc, #360]	; (8000520 <FWD_seq+0x218>)
+ 80003b8:	6813      	ldr	r3, [r2, #0]
+ 80003ba:	f36f 238a 	bfc	r3, #10, #1
+ 80003be:	6013      	str	r3, [r2, #0]
+			delay();
+ 80003c0:	f7ff ff12 	bl	80001e8 <delay>
+			pPortDOutReg->pin_10 = 0X01;  //C2 HIGH
+ 80003c4:	4a56      	ldr	r2, [pc, #344]	; (8000520 <FWD_seq+0x218>)
+ 80003c6:	6813      	ldr	r3, [r2, #0]
+ 80003c8:	f443 6380 	orr.w	r3, r3, #1024	; 0x400
+ 80003cc:	6013      	str	r3, [r2, #0]
+			delay();
+ 80003ce:	f7ff ff0b 	bl	80001e8 <delay>
+			pPortDOutReg->pin_9  = 0X00;  //C1 LOW
+ 80003d2:	4a53      	ldr	r2, [pc, #332]	; (8000520 <FWD_seq+0x218>)
+ 80003d4:	6813      	ldr	r3, [r2, #0]
+ 80003d6:	f36f 2349 	bfc	r3, #9, #1
+ 80003da:	6013      	str	r3, [r2, #0]
+			delay();
+ 80003dc:	f7ff ff04 	bl	80001e8 <delay>
+			pPortDOutReg->pin_9  = 0X01;  //C1 HIGH
+ 80003e0:	4a4f      	ldr	r2, [pc, #316]	; (8000520 <FWD_seq+0x218>)
+ 80003e2:	6813      	ldr	r3, [r2, #0]
+ 80003e4:	f443 7300 	orr.w	r3, r3, #512	; 0x200
+ 80003e8:	6013      	str	r3, [r2, #0]
+			delay();
+ 80003ea:	f7ff fefd 	bl	80001e8 <delay>
+			pPortDOutReg->pin_8  = 0X00;  //C0 LOW
+ 80003ee:	4a4c      	ldr	r2, [pc, #304]	; (8000520 <FWD_seq+0x218>)
+ 80003f0:	6813      	ldr	r3, [r2, #0]
+ 80003f2:	f36f 2308 	bfc	r3, #8, #1
+ 80003f6:	6013      	str	r3, [r2, #0]
+			delay();
+ 80003f8:	f7ff fef6 	bl	80001e8 <delay>
+			pPortDOutReg->pin_8  = 0X01;  //C0 HIGH
+ 80003fc:	4a48      	ldr	r2, [pc, #288]	; (8000520 <FWD_seq+0x218>)
+ 80003fe:	6813      	ldr	r3, [r2, #0]
+ 8000400:	f443 7380 	orr.w	r3, r3, #256	; 0x100
+ 8000404:	6013      	str	r3, [r2, #0]
+			delay();
+ 8000406:	f7ff feef 	bl	80001e8 <delay>
+			pPortDOutReg->pin_1  = 0X00;  //R1 LOW
+ 800040a:	4a45      	ldr	r2, [pc, #276]	; (8000520 <FWD_seq+0x218>)
+ 800040c:	6813      	ldr	r3, [r2, #0]
+ 800040e:	f36f 0341 	bfc	r3, #1, #1
+ 8000412:	6013      	str	r3, [r2, #0]
+				/*Row 2*/
+			pPortDOutReg->pin_2  = 0X01;  //R2 HIGH
+ 8000414:	4a42      	ldr	r2, [pc, #264]	; (8000520 <FWD_seq+0x218>)
+ 8000416:	6813      	ldr	r3, [r2, #0]
+ 8000418:	f043 0304 	orr.w	r3, r3, #4
+ 800041c:	6013      	str	r3, [r2, #0]
+
+			pPortDOutReg->pin_8  = 0X00;  //C0 LOW
+ 800041e:	4a40      	ldr	r2, [pc, #256]	; (8000520 <FWD_seq+0x218>)
+ 8000420:	6813      	ldr	r3, [r2, #0]
+ 8000422:	f36f 2308 	bfc	r3, #8, #1
+ 8000426:	6013      	str	r3, [r2, #0]
+			delay();
+ 8000428:	f7ff fede 	bl	80001e8 <delay>
+			pPortDOutReg->pin_8  = 0X01;  //C0 HIGH
+ 800042c:	4a3c      	ldr	r2, [pc, #240]	; (8000520 <FWD_seq+0x218>)
+ 800042e:	6813      	ldr	r3, [r2, #0]
+ 8000430:	f443 7380 	orr.w	r3, r3, #256	; 0x100
+ 8000434:	6013      	str	r3, [r2, #0]
+			delay();
+ 8000436:	f7ff fed7 	bl	80001e8 <delay>
+			pPortDOutReg->pin_9  = 0X00;  //C1 LOW
+ 800043a:	4a39      	ldr	r2, [pc, #228]	; (8000520 <FWD_seq+0x218>)
+ 800043c:	6813      	ldr	r3, [r2, #0]
+ 800043e:	f36f 2349 	bfc	r3, #9, #1
+ 8000442:	6013      	str	r3, [r2, #0]
+			delay();
+ 8000444:	f7ff fed0 	bl	80001e8 <delay>
+			pPortDOutReg->pin_9  = 0X01;  //C1 HIGH
+ 8000448:	4a35      	ldr	r2, [pc, #212]	; (8000520 <FWD_seq+0x218>)
+ 800044a:	6813      	ldr	r3, [r2, #0]
+ 800044c:	f443 7300 	orr.w	r3, r3, #512	; 0x200
+ 8000450:	6013      	str	r3, [r2, #0]
+			delay();
+ 8000452:	f7ff fec9 	bl	80001e8 <delay>
+			pPortDOutReg->pin_10 = 0X00;  //C2 LOW
+ 8000456:	4a32      	ldr	r2, [pc, #200]	; (8000520 <FWD_seq+0x218>)
+ 8000458:	6813      	ldr	r3, [r2, #0]
+ 800045a:	f36f 238a 	bfc	r3, #10, #1
+ 800045e:	6013      	str	r3, [r2, #0]
+			delay();
+ 8000460:	f7ff fec2 	bl	80001e8 <delay>
+			pPortDOutReg->pin_10 = 0X01;  //C2 HIGH
+ 8000464:	4a2e      	ldr	r2, [pc, #184]	; (8000520 <FWD_seq+0x218>)
+ 8000466:	6813      	ldr	r3, [r2, #0]
+ 8000468:	f443 6380 	orr.w	r3, r3, #1024	; 0x400
+ 800046c:	6013      	str	r3, [r2, #0]
+			delay();
+ 800046e:	f7ff febb 	bl	80001e8 <delay>
+			pPortDOutReg->pin_11 = 0X00;  //C3 LOW
+ 8000472:	4a2b      	ldr	r2, [pc, #172]	; (8000520 <FWD_seq+0x218>)
+ 8000474:	6813      	ldr	r3, [r2, #0]
+ 8000476:	f36f 23cb 	bfc	r3, #11, #1
+ 800047a:	6013      	str	r3, [r2, #0]
+			delay();
+ 800047c:	f7ff feb4 	bl	80001e8 <delay>
+			pPortDOutReg->pin_11 = 0X01;  //C3 HIGH
+ 8000480:	4a27      	ldr	r2, [pc, #156]	; (8000520 <FWD_seq+0x218>)
+ 8000482:	6813      	ldr	r3, [r2, #0]
+ 8000484:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 8000488:	6013      	str	r3, [r2, #0]
+			delay();
+ 800048a:	f7ff fead 	bl	80001e8 <delay>
+			pPortDOutReg->pin_2  = 0X00;  //R2 LOW
+ 800048e:	4a24      	ldr	r2, [pc, #144]	; (8000520 <FWD_seq+0x218>)
+ 8000490:	6813      	ldr	r3, [r2, #0]
+ 8000492:	f36f 0382 	bfc	r3, #2, #1
+ 8000496:	6013      	str	r3, [r2, #0]
+				/*Row 3*/
+			pPortDOutReg->pin_3  = 0X01;  //R3 HIGH
+ 8000498:	4a21      	ldr	r2, [pc, #132]	; (8000520 <FWD_seq+0x218>)
+ 800049a:	6813      	ldr	r3, [r2, #0]
+ 800049c:	f043 0308 	orr.w	r3, r3, #8
+ 80004a0:	6013      	str	r3, [r2, #0]
+
+			pPortDOutReg->pin_11 = 0X00;  //C3 LOW
+ 80004a2:	4a1f      	ldr	r2, [pc, #124]	; (8000520 <FWD_seq+0x218>)
+ 80004a4:	6813      	ldr	r3, [r2, #0]
+ 80004a6:	f36f 23cb 	bfc	r3, #11, #1
+ 80004aa:	6013      	str	r3, [r2, #0]
+			delay();
+ 80004ac:	f7ff fe9c 	bl	80001e8 <delay>
+			pPortDOutReg->pin_11 = 0X01;  //C3 HIGH
+ 80004b0:	4a1b      	ldr	r2, [pc, #108]	; (8000520 <FWD_seq+0x218>)
+ 80004b2:	6813      	ldr	r3, [r2, #0]
+ 80004b4:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 80004b8:	6013      	str	r3, [r2, #0]
+			delay();
+ 80004ba:	f7ff fe95 	bl	80001e8 <delay>
+			pPortDOutReg->pin_10 = 0X00;  //C2 LOW
+ 80004be:	4a18      	ldr	r2, [pc, #96]	; (8000520 <FWD_seq+0x218>)
+ 80004c0:	6813      	ldr	r3, [r2, #0]
+ 80004c2:	f36f 238a 	bfc	r3, #10, #1
+ 80004c6:	6013      	str	r3, [r2, #0]
+			delay();
+ 80004c8:	f7ff fe8e 	bl	80001e8 <delay>
+			pPortDOutReg->pin_10 = 0X01;  //C2 HIGH
+ 80004cc:	4a14      	ldr	r2, [pc, #80]	; (8000520 <FWD_seq+0x218>)
+ 80004ce:	6813      	ldr	r3, [r2, #0]
+ 80004d0:	f443 6380 	orr.w	r3, r3, #1024	; 0x400
+ 80004d4:	6013      	str	r3, [r2, #0]
+			delay();
+ 80004d6:	f7ff fe87 	bl	80001e8 <delay>
+			pPortDOutReg->pin_9  = 0X00;  //C1 LOW
+ 80004da:	4a11      	ldr	r2, [pc, #68]	; (8000520 <FWD_seq+0x218>)
+ 80004dc:	6813      	ldr	r3, [r2, #0]
+ 80004de:	f36f 2349 	bfc	r3, #9, #1
+ 80004e2:	6013      	str	r3, [r2, #0]
+			delay();
+ 80004e4:	f7ff fe80 	bl	80001e8 <delay>
+			pPortDOutReg->pin_9  = 0X01;  //C1 HIGH
+ 80004e8:	4a0d      	ldr	r2, [pc, #52]	; (8000520 <FWD_seq+0x218>)
+ 80004ea:	6813      	ldr	r3, [r2, #0]
+ 80004ec:	f443 7300 	orr.w	r3, r3, #512	; 0x200
+ 80004f0:	6013      	str	r3, [r2, #0]
+			delay();
+ 80004f2:	f7ff fe79 	bl	80001e8 <delay>
+			pPortDOutReg->pin_8  = 0X00;  //C0 LOW
+ 80004f6:	4a0a      	ldr	r2, [pc, #40]	; (8000520 <FWD_seq+0x218>)
+ 80004f8:	6813      	ldr	r3, [r2, #0]
+ 80004fa:	f36f 2308 	bfc	r3, #8, #1
+ 80004fe:	6013      	str	r3, [r2, #0]
+			delay();
+ 8000500:	f7ff fe72 	bl	80001e8 <delay>
+			pPortDOutReg->pin_8  = 0X01;  //C0 HIGH
+ 8000504:	4a06      	ldr	r2, [pc, #24]	; (8000520 <FWD_seq+0x218>)
+ 8000506:	6813      	ldr	r3, [r2, #0]
+ 8000508:	f443 7380 	orr.w	r3, r3, #256	; 0x100
+ 800050c:	6013      	str	r3, [r2, #0]
+			delay();
+ 800050e:	f7ff fe6b 	bl	80001e8 <delay>
+			pPortDOutReg->pin_3  = 0X00;  //R3 LOW
+ 8000512:	4a03      	ldr	r2, [pc, #12]	; (8000520 <FWD_seq+0x218>)
+ 8000514:	6813      	ldr	r3, [r2, #0]
+ 8000516:	f36f 03c3 	bfc	r3, #3, #1
+ 800051a:	6013      	str	r3, [r2, #0]
+
+
+}
+ 800051c:	bf00      	nop
+ 800051e:	bd80      	pop	{r7, pc}
+ 8000520:	40020c14 	.word	0x40020c14
+
+08000524 <RVS_seq>:
+
+void RVS_seq(){
+ 8000524:	b580      	push	{r7, lr}
+ 8000526:	af00      	add	r7, sp, #0
+
+		/*Row 3*/
+		pPortDOutReg->pin_3  = 0X01;  //R3 HIGH
+ 8000528:	4a84      	ldr	r2, [pc, #528]	; (800073c <RVS_seq+0x218>)
+ 800052a:	6813      	ldr	r3, [r2, #0]
+ 800052c:	f043 0308 	orr.w	r3, r3, #8
+ 8000530:	6013      	str	r3, [r2, #0]
+
+		pPortDOutReg->pin_8  = 0X00;  //C0 LOW
+ 8000532:	4a82      	ldr	r2, [pc, #520]	; (800073c <RVS_seq+0x218>)
+ 8000534:	6813      	ldr	r3, [r2, #0]
+ 8000536:	f36f 2308 	bfc	r3, #8, #1
+ 800053a:	6013      	str	r3, [r2, #0]
+		delay();
+ 800053c:	f7ff fe54 	bl	80001e8 <delay>
+		pPortDOutReg->pin_8  = 0X01;  //C0 HIGH
+ 8000540:	4a7e      	ldr	r2, [pc, #504]	; (800073c <RVS_seq+0x218>)
+ 8000542:	6813      	ldr	r3, [r2, #0]
+ 8000544:	f443 7380 	orr.w	r3, r3, #256	; 0x100
+ 8000548:	6013      	str	r3, [r2, #0]
+		delay();
+ 800054a:	f7ff fe4d 	bl	80001e8 <delay>
+		pPortDOutReg->pin_9  = 0X00;  //C1 LOW
+ 800054e:	4a7b      	ldr	r2, [pc, #492]	; (800073c <RVS_seq+0x218>)
+ 8000550:	6813      	ldr	r3, [r2, #0]
+ 8000552:	f36f 2349 	bfc	r3, #9, #1
+ 8000556:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000558:	f7ff fe46 	bl	80001e8 <delay>
+		pPortDOutReg->pin_9  = 0X01;  //C1 HIGH
+ 800055c:	4a77      	ldr	r2, [pc, #476]	; (800073c <RVS_seq+0x218>)
+ 800055e:	6813      	ldr	r3, [r2, #0]
+ 8000560:	f443 7300 	orr.w	r3, r3, #512	; 0x200
+ 8000564:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000566:	f7ff fe3f 	bl	80001e8 <delay>
+		pPortDOutReg->pin_10 = 0X00;  //C2 LOW
+ 800056a:	4a74      	ldr	r2, [pc, #464]	; (800073c <RVS_seq+0x218>)
+ 800056c:	6813      	ldr	r3, [r2, #0]
+ 800056e:	f36f 238a 	bfc	r3, #10, #1
+ 8000572:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000574:	f7ff fe38 	bl	80001e8 <delay>
+		pPortDOutReg->pin_10 = 0X01;  //C2 HIGH
+ 8000578:	4a70      	ldr	r2, [pc, #448]	; (800073c <RVS_seq+0x218>)
+ 800057a:	6813      	ldr	r3, [r2, #0]
+ 800057c:	f443 6380 	orr.w	r3, r3, #1024	; 0x400
+ 8000580:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000582:	f7ff fe31 	bl	80001e8 <delay>
+		pPortDOutReg->pin_11 = 0X00;  //C3 LOW
+ 8000586:	4a6d      	ldr	r2, [pc, #436]	; (800073c <RVS_seq+0x218>)
+ 8000588:	6813      	ldr	r3, [r2, #0]
+ 800058a:	f36f 23cb 	bfc	r3, #11, #1
+ 800058e:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000590:	f7ff fe2a 	bl	80001e8 <delay>
+		pPortDOutReg->pin_11 = 0X01;  //C3 HIGH
+ 8000594:	4a69      	ldr	r2, [pc, #420]	; (800073c <RVS_seq+0x218>)
+ 8000596:	6813      	ldr	r3, [r2, #0]
+ 8000598:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 800059c:	6013      	str	r3, [r2, #0]
+		delay();
+ 800059e:	f7ff fe23 	bl	80001e8 <delay>
+		pPortDOutReg->pin_3  = 0X00;  //R3 LOW
+ 80005a2:	4a66      	ldr	r2, [pc, #408]	; (800073c <RVS_seq+0x218>)
+ 80005a4:	6813      	ldr	r3, [r2, #0]
+ 80005a6:	f36f 03c3 	bfc	r3, #3, #1
+ 80005aa:	6013      	str	r3, [r2, #0]
+			/*Row 2*/
+		pPortDOutReg->pin_2  = 0X01;  //R2 HIGH
+ 80005ac:	4a63      	ldr	r2, [pc, #396]	; (800073c <RVS_seq+0x218>)
+ 80005ae:	6813      	ldr	r3, [r2, #0]
+ 80005b0:	f043 0304 	orr.w	r3, r3, #4
+ 80005b4:	6013      	str	r3, [r2, #0]
+
+		pPortDOutReg->pin_11 = 0X00;  //C3 LOW
+ 80005b6:	4a61      	ldr	r2, [pc, #388]	; (800073c <RVS_seq+0x218>)
+ 80005b8:	6813      	ldr	r3, [r2, #0]
+ 80005ba:	f36f 23cb 	bfc	r3, #11, #1
+ 80005be:	6013      	str	r3, [r2, #0]
+		delay();
+ 80005c0:	f7ff fe12 	bl	80001e8 <delay>
+		pPortDOutReg->pin_11 = 0X01;  //C3 HIGH
+ 80005c4:	4a5d      	ldr	r2, [pc, #372]	; (800073c <RVS_seq+0x218>)
+ 80005c6:	6813      	ldr	r3, [r2, #0]
+ 80005c8:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 80005cc:	6013      	str	r3, [r2, #0]
+		delay();
+ 80005ce:	f7ff fe0b 	bl	80001e8 <delay>
+		pPortDOutReg->pin_10 = 0X00;  //C2 LOW
+ 80005d2:	4a5a      	ldr	r2, [pc, #360]	; (800073c <RVS_seq+0x218>)
+ 80005d4:	6813      	ldr	r3, [r2, #0]
+ 80005d6:	f36f 238a 	bfc	r3, #10, #1
+ 80005da:	6013      	str	r3, [r2, #0]
+		delay();
+ 80005dc:	f7ff fe04 	bl	80001e8 <delay>
+		pPortDOutReg->pin_10 = 0X01;  //C2 HIGH
+ 80005e0:	4a56      	ldr	r2, [pc, #344]	; (800073c <RVS_seq+0x218>)
+ 80005e2:	6813      	ldr	r3, [r2, #0]
+ 80005e4:	f443 6380 	orr.w	r3, r3, #1024	; 0x400
+ 80005e8:	6013      	str	r3, [r2, #0]
+		delay();
+ 80005ea:	f7ff fdfd 	bl	80001e8 <delay>
+		pPortDOutReg->pin_9  = 0X00;  //C1 LOW
+ 80005ee:	4a53      	ldr	r2, [pc, #332]	; (800073c <RVS_seq+0x218>)
+ 80005f0:	6813      	ldr	r3, [r2, #0]
+ 80005f2:	f36f 2349 	bfc	r3, #9, #1
+ 80005f6:	6013      	str	r3, [r2, #0]
+		delay();
+ 80005f8:	f7ff fdf6 	bl	80001e8 <delay>
+		pPortDOutReg->pin_9  = 0X01;  //C1 HIGH
+ 80005fc:	4a4f      	ldr	r2, [pc, #316]	; (800073c <RVS_seq+0x218>)
+ 80005fe:	6813      	ldr	r3, [r2, #0]
+ 8000600:	f443 7300 	orr.w	r3, r3, #512	; 0x200
+ 8000604:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000606:	f7ff fdef 	bl	80001e8 <delay>
+		pPortDOutReg->pin_8  = 0X00;  //C0 LOW
+ 800060a:	4a4c      	ldr	r2, [pc, #304]	; (800073c <RVS_seq+0x218>)
+ 800060c:	6813      	ldr	r3, [r2, #0]
+ 800060e:	f36f 2308 	bfc	r3, #8, #1
+ 8000612:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000614:	f7ff fde8 	bl	80001e8 <delay>
+		pPortDOutReg->pin_8  = 0X01;  //C0 HIGH
+ 8000618:	4a48      	ldr	r2, [pc, #288]	; (800073c <RVS_seq+0x218>)
+ 800061a:	6813      	ldr	r3, [r2, #0]
+ 800061c:	f443 7380 	orr.w	r3, r3, #256	; 0x100
+ 8000620:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000622:	f7ff fde1 	bl	80001e8 <delay>
+		pPortDOutReg->pin_2  = 0X00;  //R2 LOW
+ 8000626:	4a45      	ldr	r2, [pc, #276]	; (800073c <RVS_seq+0x218>)
+ 8000628:	6813      	ldr	r3, [r2, #0]
+ 800062a:	f36f 0382 	bfc	r3, #2, #1
+ 800062e:	6013      	str	r3, [r2, #0]
+			/*Row 1*/
+		pPortDOutReg->pin_1  = 0X01;  //R1 HIGH
+ 8000630:	4a42      	ldr	r2, [pc, #264]	; (800073c <RVS_seq+0x218>)
+ 8000632:	6813      	ldr	r3, [r2, #0]
+ 8000634:	f043 0302 	orr.w	r3, r3, #2
+ 8000638:	6013      	str	r3, [r2, #0]
+
+		pPortDOutReg->pin_8  = 0X00;  //C0 LOW
+ 800063a:	4a40      	ldr	r2, [pc, #256]	; (800073c <RVS_seq+0x218>)
+ 800063c:	6813      	ldr	r3, [r2, #0]
+ 800063e:	f36f 2308 	bfc	r3, #8, #1
+ 8000642:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000644:	f7ff fdd0 	bl	80001e8 <delay>
+		pPortDOutReg->pin_8  = 0X01;  //C0 HIGH
+ 8000648:	4a3c      	ldr	r2, [pc, #240]	; (800073c <RVS_seq+0x218>)
+ 800064a:	6813      	ldr	r3, [r2, #0]
+ 800064c:	f443 7380 	orr.w	r3, r3, #256	; 0x100
+ 8000650:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000652:	f7ff fdc9 	bl	80001e8 <delay>
+		pPortDOutReg->pin_9  = 0X00;  //C1 LOW
+ 8000656:	4a39      	ldr	r2, [pc, #228]	; (800073c <RVS_seq+0x218>)
+ 8000658:	6813      	ldr	r3, [r2, #0]
+ 800065a:	f36f 2349 	bfc	r3, #9, #1
+ 800065e:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000660:	f7ff fdc2 	bl	80001e8 <delay>
+		pPortDOutReg->pin_9  = 0X01;  //C1 HIGH
+ 8000664:	4a35      	ldr	r2, [pc, #212]	; (800073c <RVS_seq+0x218>)
+ 8000666:	6813      	ldr	r3, [r2, #0]
+ 8000668:	f443 7300 	orr.w	r3, r3, #512	; 0x200
+ 800066c:	6013      	str	r3, [r2, #0]
+		delay();
+ 800066e:	f7ff fdbb 	bl	80001e8 <delay>
+		pPortDOutReg->pin_10 = 0X00;  //C2 LOW
+ 8000672:	4a32      	ldr	r2, [pc, #200]	; (800073c <RVS_seq+0x218>)
+ 8000674:	6813      	ldr	r3, [r2, #0]
+ 8000676:	f36f 238a 	bfc	r3, #10, #1
+ 800067a:	6013      	str	r3, [r2, #0]
+		delay();
+ 800067c:	f7ff fdb4 	bl	80001e8 <delay>
+		pPortDOutReg->pin_10 = 0X01;  //C2 HIGH
+ 8000680:	4a2e      	ldr	r2, [pc, #184]	; (800073c <RVS_seq+0x218>)
+ 8000682:	6813      	ldr	r3, [r2, #0]
+ 8000684:	f443 6380 	orr.w	r3, r3, #1024	; 0x400
+ 8000688:	6013      	str	r3, [r2, #0]
+		delay();
+ 800068a:	f7ff fdad 	bl	80001e8 <delay>
+		pPortDOutReg->pin_11 = 0X00;  //C3 LOW
+ 800068e:	4a2b      	ldr	r2, [pc, #172]	; (800073c <RVS_seq+0x218>)
+ 8000690:	6813      	ldr	r3, [r2, #0]
+ 8000692:	f36f 23cb 	bfc	r3, #11, #1
+ 8000696:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000698:	f7ff fda6 	bl	80001e8 <delay>
+		pPortDOutReg->pin_11 = 0X01;  //C3 HIGH
+ 800069c:	4a27      	ldr	r2, [pc, #156]	; (800073c <RVS_seq+0x218>)
+ 800069e:	6813      	ldr	r3, [r2, #0]
+ 80006a0:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 80006a4:	6013      	str	r3, [r2, #0]
+		delay();
+ 80006a6:	f7ff fd9f 	bl	80001e8 <delay>
+		pPortDOutReg->pin_1  = 0X00;  //R1 LOW
+ 80006aa:	4a24      	ldr	r2, [pc, #144]	; (800073c <RVS_seq+0x218>)
+ 80006ac:	6813      	ldr	r3, [r2, #0]
+ 80006ae:	f36f 0341 	bfc	r3, #1, #1
+ 80006b2:	6013      	str	r3, [r2, #0]
+			/*Row 0*/
+		pPortDOutReg->pin_0  = 0X01;  //R0 HIGH
+ 80006b4:	4a21      	ldr	r2, [pc, #132]	; (800073c <RVS_seq+0x218>)
+ 80006b6:	6813      	ldr	r3, [r2, #0]
+ 80006b8:	f043 0301 	orr.w	r3, r3, #1
+ 80006bc:	6013      	str	r3, [r2, #0]
+
+		pPortDOutReg->pin_11 = 0X00;  //C3 LOW
+ 80006be:	4a1f      	ldr	r2, [pc, #124]	; (800073c <RVS_seq+0x218>)
+ 80006c0:	6813      	ldr	r3, [r2, #0]
+ 80006c2:	f36f 23cb 	bfc	r3, #11, #1
+ 80006c6:	6013      	str	r3, [r2, #0]
+		delay();
+ 80006c8:	f7ff fd8e 	bl	80001e8 <delay>
+		pPortDOutReg->pin_11 = 0X01;  //C3 HIGH
+ 80006cc:	4a1b      	ldr	r2, [pc, #108]	; (800073c <RVS_seq+0x218>)
+ 80006ce:	6813      	ldr	r3, [r2, #0]
+ 80006d0:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 80006d4:	6013      	str	r3, [r2, #0]
+		delay();
+ 80006d6:	f7ff fd87 	bl	80001e8 <delay>
+		pPortDOutReg->pin_10 = 0X00;  //C2 LOW
+ 80006da:	4a18      	ldr	r2, [pc, #96]	; (800073c <RVS_seq+0x218>)
+ 80006dc:	6813      	ldr	r3, [r2, #0]
+ 80006de:	f36f 238a 	bfc	r3, #10, #1
+ 80006e2:	6013      	str	r3, [r2, #0]
+		delay();
+ 80006e4:	f7ff fd80 	bl	80001e8 <delay>
+		pPortDOutReg->pin_10 = 0X01;  //C2 HIGH
+ 80006e8:	4a14      	ldr	r2, [pc, #80]	; (800073c <RVS_seq+0x218>)
+ 80006ea:	6813      	ldr	r3, [r2, #0]
+ 80006ec:	f443 6380 	orr.w	r3, r3, #1024	; 0x400
+ 80006f0:	6013      	str	r3, [r2, #0]
+		delay();
+ 80006f2:	f7ff fd79 	bl	80001e8 <delay>
+		pPortDOutReg->pin_9  = 0X00;  //C1 LOW
+ 80006f6:	4a11      	ldr	r2, [pc, #68]	; (800073c <RVS_seq+0x218>)
+ 80006f8:	6813      	ldr	r3, [r2, #0]
+ 80006fa:	f36f 2349 	bfc	r3, #9, #1
+ 80006fe:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000700:	f7ff fd72 	bl	80001e8 <delay>
+		pPortDOutReg->pin_9  = 0X01;  //C1 HIGH
+ 8000704:	4a0d      	ldr	r2, [pc, #52]	; (800073c <RVS_seq+0x218>)
+ 8000706:	6813      	ldr	r3, [r2, #0]
+ 8000708:	f443 7300 	orr.w	r3, r3, #512	; 0x200
+ 800070c:	6013      	str	r3, [r2, #0]
+		delay();
+ 800070e:	f7ff fd6b 	bl	80001e8 <delay>
+		pPortDOutReg->pin_8  = 0X00;  //C0 LOW
+ 8000712:	4a0a      	ldr	r2, [pc, #40]	; (800073c <RVS_seq+0x218>)
+ 8000714:	6813      	ldr	r3, [r2, #0]
+ 8000716:	f36f 2308 	bfc	r3, #8, #1
+ 800071a:	6013      	str	r3, [r2, #0]
+		delay();
+ 800071c:	f7ff fd64 	bl	80001e8 <delay>
+		pPortDOutReg->pin_8  = 0X01;  //C0 HIGH
+ 8000720:	4a06      	ldr	r2, [pc, #24]	; (800073c <RVS_seq+0x218>)
+ 8000722:	6813      	ldr	r3, [r2, #0]
+ 8000724:	f443 7380 	orr.w	r3, r3, #256	; 0x100
+ 8000728:	6013      	str	r3, [r2, #0]
+		delay();
+ 800072a:	f7ff fd5d 	bl	80001e8 <delay>
+		pPortDOutReg->pin_0  = 0X00;  //R0 LOW
+ 800072e:	4a03      	ldr	r2, [pc, #12]	; (800073c <RVS_seq+0x218>)
+ 8000730:	6813      	ldr	r3, [r2, #0]
+ 8000732:	f36f 0300 	bfc	r3, #0, #1
+ 8000736:	6013      	str	r3, [r2, #0]
+
+}
+ 8000738:	bf00      	nop
+ 800073a:	bd80      	pop	{r7, pc}
+ 800073c:	40020c14 	.word	0x40020c14
+
+08000740 <top_to_bottom>:
+
+void top_to_bottom(){
+ 8000740:	b580      	push	{r7, lr}
+ 8000742:	b082      	sub	sp, #8
+ 8000744:	af00      	add	r7, sp, #0
+	uint8_t count = 0;
+ 8000746:	2300      	movs	r3, #0
+ 8000748:	71fb      	strb	r3, [r7, #7]
+	pPortDOutReg->pin_8  = 0X00;  //C0 LOW
+ 800074a:	4a51      	ldr	r2, [pc, #324]	; (8000890 <top_to_bottom+0x150>)
+ 800074c:	6813      	ldr	r3, [r2, #0]
+ 800074e:	f36f 2308 	bfc	r3, #8, #1
+ 8000752:	6013      	str	r3, [r2, #0]
+	pPortDOutReg->pin_9  = 0X00;  //C1 LOW
+ 8000754:	4a4e      	ldr	r2, [pc, #312]	; (8000890 <top_to_bottom+0x150>)
+ 8000756:	6813      	ldr	r3, [r2, #0]
+ 8000758:	f36f 2349 	bfc	r3, #9, #1
+ 800075c:	6013      	str	r3, [r2, #0]
+	pPortDOutReg->pin_10 = 0X00;  //C2 LOW
+ 800075e:	4a4c      	ldr	r2, [pc, #304]	; (8000890 <top_to_bottom+0x150>)
+ 8000760:	6813      	ldr	r3, [r2, #0]
+ 8000762:	f36f 238a 	bfc	r3, #10, #1
+ 8000766:	6013      	str	r3, [r2, #0]
+	pPortDOutReg->pin_11 = 0X00;  //C3 LOW
+ 8000768:	4a49      	ldr	r2, [pc, #292]	; (8000890 <top_to_bottom+0x150>)
+ 800076a:	6813      	ldr	r3, [r2, #0]
+ 800076c:	f36f 23cb 	bfc	r3, #11, #1
+ 8000770:	6013      	str	r3, [r2, #0]
+
+	while(count <= 5){
+ 8000772:	e072      	b.n	800085a <top_to_bottom+0x11a>
+		/*Down*/
+		pPortDOutReg->pin_0  = 0X01;  //R0 HIGH
+ 8000774:	4a46      	ldr	r2, [pc, #280]	; (8000890 <top_to_bottom+0x150>)
+ 8000776:	6813      	ldr	r3, [r2, #0]
+ 8000778:	f043 0301 	orr.w	r3, r3, #1
+ 800077c:	6013      	str	r3, [r2, #0]
+		delay();
+ 800077e:	f7ff fd33 	bl	80001e8 <delay>
+		pPortDOutReg->pin_0  = 0X00;  //R0 LOW
+ 8000782:	4a43      	ldr	r2, [pc, #268]	; (8000890 <top_to_bottom+0x150>)
+ 8000784:	6813      	ldr	r3, [r2, #0]
+ 8000786:	f36f 0300 	bfc	r3, #0, #1
+ 800078a:	6013      	str	r3, [r2, #0]
+		delay();
+ 800078c:	f7ff fd2c 	bl	80001e8 <delay>
+		pPortDOutReg->pin_1  = 0X01;  //R1 HIGH
+ 8000790:	4a3f      	ldr	r2, [pc, #252]	; (8000890 <top_to_bottom+0x150>)
+ 8000792:	6813      	ldr	r3, [r2, #0]
+ 8000794:	f043 0302 	orr.w	r3, r3, #2
+ 8000798:	6013      	str	r3, [r2, #0]
+		delay();
+ 800079a:	f7ff fd25 	bl	80001e8 <delay>
+		pPortDOutReg->pin_1  = 0X00;  //R1 LOW
+ 800079e:	4a3c      	ldr	r2, [pc, #240]	; (8000890 <top_to_bottom+0x150>)
+ 80007a0:	6813      	ldr	r3, [r2, #0]
+ 80007a2:	f36f 0341 	bfc	r3, #1, #1
+ 80007a6:	6013      	str	r3, [r2, #0]
+		delay();
+ 80007a8:	f7ff fd1e 	bl	80001e8 <delay>
+		pPortDOutReg->pin_2  = 0X01;  //R2 HIGH
+ 80007ac:	4a38      	ldr	r2, [pc, #224]	; (8000890 <top_to_bottom+0x150>)
+ 80007ae:	6813      	ldr	r3, [r2, #0]
+ 80007b0:	f043 0304 	orr.w	r3, r3, #4
+ 80007b4:	6013      	str	r3, [r2, #0]
+		delay();
+ 80007b6:	f7ff fd17 	bl	80001e8 <delay>
+		pPortDOutReg->pin_2  = 0X00;  //R2 LOW
+ 80007ba:	4a35      	ldr	r2, [pc, #212]	; (8000890 <top_to_bottom+0x150>)
+ 80007bc:	6813      	ldr	r3, [r2, #0]
+ 80007be:	f36f 0382 	bfc	r3, #2, #1
+ 80007c2:	6013      	str	r3, [r2, #0]
+		delay();
+ 80007c4:	f7ff fd10 	bl	80001e8 <delay>
+		pPortDOutReg->pin_3  = 0X01;  //R3 HIGH
+ 80007c8:	4a31      	ldr	r2, [pc, #196]	; (8000890 <top_to_bottom+0x150>)
+ 80007ca:	6813      	ldr	r3, [r2, #0]
+ 80007cc:	f043 0308 	orr.w	r3, r3, #8
+ 80007d0:	6013      	str	r3, [r2, #0]
+		delay();
+ 80007d2:	f7ff fd09 	bl	80001e8 <delay>
+		pPortDOutReg->pin_3  = 0X00;  //R3 LOW
+ 80007d6:	4a2e      	ldr	r2, [pc, #184]	; (8000890 <top_to_bottom+0x150>)
+ 80007d8:	6813      	ldr	r3, [r2, #0]
+ 80007da:	f36f 03c3 	bfc	r3, #3, #1
+ 80007de:	6013      	str	r3, [r2, #0]
+		delay();
+ 80007e0:	f7ff fd02 	bl	80001e8 <delay>
+		/*Up*/
+		pPortDOutReg->pin_3  = 0X01;  //R3 HIGH
+ 80007e4:	4a2a      	ldr	r2, [pc, #168]	; (8000890 <top_to_bottom+0x150>)
+ 80007e6:	6813      	ldr	r3, [r2, #0]
+ 80007e8:	f043 0308 	orr.w	r3, r3, #8
+ 80007ec:	6013      	str	r3, [r2, #0]
+		delay();
+ 80007ee:	f7ff fcfb 	bl	80001e8 <delay>
+		pPortDOutReg->pin_3  = 0X00;  //R3 LOW
+ 80007f2:	4a27      	ldr	r2, [pc, #156]	; (8000890 <top_to_bottom+0x150>)
+ 80007f4:	6813      	ldr	r3, [r2, #0]
+ 80007f6:	f36f 03c3 	bfc	r3, #3, #1
+ 80007fa:	6013      	str	r3, [r2, #0]
+		delay();
+ 80007fc:	f7ff fcf4 	bl	80001e8 <delay>
+		pPortDOutReg->pin_2  = 0X01;  //R2 HIGH
+ 8000800:	4a23      	ldr	r2, [pc, #140]	; (8000890 <top_to_bottom+0x150>)
+ 8000802:	6813      	ldr	r3, [r2, #0]
+ 8000804:	f043 0304 	orr.w	r3, r3, #4
+ 8000808:	6013      	str	r3, [r2, #0]
+		delay();
+ 800080a:	f7ff fced 	bl	80001e8 <delay>
+		pPortDOutReg->pin_2  = 0X00;  //R2 LOW
+ 800080e:	4a20      	ldr	r2, [pc, #128]	; (8000890 <top_to_bottom+0x150>)
+ 8000810:	6813      	ldr	r3, [r2, #0]
+ 8000812:	f36f 0382 	bfc	r3, #2, #1
+ 8000816:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000818:	f7ff fce6 	bl	80001e8 <delay>
+		pPortDOutReg->pin_1  = 0X01;  //R1 HIGH
+ 800081c:	4a1c      	ldr	r2, [pc, #112]	; (8000890 <top_to_bottom+0x150>)
+ 800081e:	6813      	ldr	r3, [r2, #0]
+ 8000820:	f043 0302 	orr.w	r3, r3, #2
+ 8000824:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000826:	f7ff fcdf 	bl	80001e8 <delay>
+		pPortDOutReg->pin_1  = 0X00;  //R1 LOW
+ 800082a:	4a19      	ldr	r2, [pc, #100]	; (8000890 <top_to_bottom+0x150>)
+ 800082c:	6813      	ldr	r3, [r2, #0]
+ 800082e:	f36f 0341 	bfc	r3, #1, #1
+ 8000832:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000834:	f7ff fcd8 	bl	80001e8 <delay>
+		pPortDOutReg->pin_0  = 0X01;  //R0 HIGH
+ 8000838:	4a15      	ldr	r2, [pc, #84]	; (8000890 <top_to_bottom+0x150>)
+ 800083a:	6813      	ldr	r3, [r2, #0]
+ 800083c:	f043 0301 	orr.w	r3, r3, #1
+ 8000840:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000842:	f7ff fcd1 	bl	80001e8 <delay>
+		pPortDOutReg->pin_0  = 0X00;  //R0 LOW
+ 8000846:	4a12      	ldr	r2, [pc, #72]	; (8000890 <top_to_bottom+0x150>)
+ 8000848:	6813      	ldr	r3, [r2, #0]
+ 800084a:	f36f 0300 	bfc	r3, #0, #1
+ 800084e:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000850:	f7ff fcca 	bl	80001e8 <delay>
+		count++;
+ 8000854:	79fb      	ldrb	r3, [r7, #7]
+ 8000856:	3301      	adds	r3, #1
+ 8000858:	71fb      	strb	r3, [r7, #7]
+	while(count <= 5){
+ 800085a:	79fb      	ldrb	r3, [r7, #7]
+ 800085c:	2b05      	cmp	r3, #5
+ 800085e:	d989      	bls.n	8000774 <top_to_bottom+0x34>
+	}
+
+	pPortDOutReg->pin_8  = 0X01;  //C0 HIGH
+ 8000860:	4a0b      	ldr	r2, [pc, #44]	; (8000890 <top_to_bottom+0x150>)
+ 8000862:	6813      	ldr	r3, [r2, #0]
+ 8000864:	f443 7380 	orr.w	r3, r3, #256	; 0x100
+ 8000868:	6013      	str	r3, [r2, #0]
+	pPortDOutReg->pin_9  = 0X01;  //C1 HIGH
+ 800086a:	4a09      	ldr	r2, [pc, #36]	; (8000890 <top_to_bottom+0x150>)
+ 800086c:	6813      	ldr	r3, [r2, #0]
+ 800086e:	f443 7300 	orr.w	r3, r3, #512	; 0x200
+ 8000872:	6013      	str	r3, [r2, #0]
+	pPortDOutReg->pin_10 = 0X01;  //C2 HIGH
+ 8000874:	4a06      	ldr	r2, [pc, #24]	; (8000890 <top_to_bottom+0x150>)
+ 8000876:	6813      	ldr	r3, [r2, #0]
+ 8000878:	f443 6380 	orr.w	r3, r3, #1024	; 0x400
+ 800087c:	6013      	str	r3, [r2, #0]
+	pPortDOutReg->pin_11 = 0X01;  //C3 HIGH
+ 800087e:	4a04      	ldr	r2, [pc, #16]	; (8000890 <top_to_bottom+0x150>)
+ 8000880:	6813      	ldr	r3, [r2, #0]
+ 8000882:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 8000886:	6013      	str	r3, [r2, #0]
+}
+ 8000888:	bf00      	nop
+ 800088a:	3708      	adds	r7, #8
+ 800088c:	46bd      	mov	sp, r7
+ 800088e:	bd80      	pop	{r7, pc}
+ 8000890:	40020c14 	.word	0x40020c14
+
+08000894 <side_seq>:
+
+void side_seq(){
+ 8000894:	b580      	push	{r7, lr}
+ 8000896:	b082      	sub	sp, #8
+ 8000898:	af00      	add	r7, sp, #0
+	uint8_t count2 = 0;
+ 800089a:	2300      	movs	r3, #0
+ 800089c:	71fb      	strb	r3, [r7, #7]
+	pPortDOutReg->pin_0  = 0X01;  //R0 HIGH
+ 800089e:	4a51      	ldr	r2, [pc, #324]	; (80009e4 <side_seq+0x150>)
+ 80008a0:	6813      	ldr	r3, [r2, #0]
+ 80008a2:	f043 0301 	orr.w	r3, r3, #1
+ 80008a6:	6013      	str	r3, [r2, #0]
+	pPortDOutReg->pin_1  = 0X01;  //R1 HIGH
+ 80008a8:	4a4e      	ldr	r2, [pc, #312]	; (80009e4 <side_seq+0x150>)
+ 80008aa:	6813      	ldr	r3, [r2, #0]
+ 80008ac:	f043 0302 	orr.w	r3, r3, #2
+ 80008b0:	6013      	str	r3, [r2, #0]
+	pPortDOutReg->pin_2  = 0X01;  //R2 HIGH
+ 80008b2:	4a4c      	ldr	r2, [pc, #304]	; (80009e4 <side_seq+0x150>)
+ 80008b4:	6813      	ldr	r3, [r2, #0]
+ 80008b6:	f043 0304 	orr.w	r3, r3, #4
+ 80008ba:	6013      	str	r3, [r2, #0]
+	pPortDOutReg->pin_3  = 0X01;  //R3 HIGH
+ 80008bc:	4a49      	ldr	r2, [pc, #292]	; (80009e4 <side_seq+0x150>)
+ 80008be:	6813      	ldr	r3, [r2, #0]
+ 80008c0:	f043 0308 	orr.w	r3, r3, #8
+ 80008c4:	6013      	str	r3, [r2, #0]
+
+	while(count2 <= 5){
+ 80008c6:	e072      	b.n	80009ae <side_seq+0x11a>
+		/*Left to Right*/
+		pPortDOutReg->pin_8   = 0X00;  //C0 LOW
+ 80008c8:	4a46      	ldr	r2, [pc, #280]	; (80009e4 <side_seq+0x150>)
+ 80008ca:	6813      	ldr	r3, [r2, #0]
+ 80008cc:	f36f 2308 	bfc	r3, #8, #1
+ 80008d0:	6013      	str	r3, [r2, #0]
+		delay();
+ 80008d2:	f7ff fc89 	bl	80001e8 <delay>
+		pPortDOutReg->pin_8   = 0X01;  //C0 HIGH
+ 80008d6:	4a43      	ldr	r2, [pc, #268]	; (80009e4 <side_seq+0x150>)
+ 80008d8:	6813      	ldr	r3, [r2, #0]
+ 80008da:	f443 7380 	orr.w	r3, r3, #256	; 0x100
+ 80008de:	6013      	str	r3, [r2, #0]
+		delay();
+ 80008e0:	f7ff fc82 	bl	80001e8 <delay>
+		pPortDOutReg->pin_9   = 0X00;  //C1 LOW
+ 80008e4:	4a3f      	ldr	r2, [pc, #252]	; (80009e4 <side_seq+0x150>)
+ 80008e6:	6813      	ldr	r3, [r2, #0]
+ 80008e8:	f36f 2349 	bfc	r3, #9, #1
+ 80008ec:	6013      	str	r3, [r2, #0]
+		delay();
+ 80008ee:	f7ff fc7b 	bl	80001e8 <delay>
+		pPortDOutReg->pin_9   = 0X01;  //C1 HIGH
+ 80008f2:	4a3c      	ldr	r2, [pc, #240]	; (80009e4 <side_seq+0x150>)
+ 80008f4:	6813      	ldr	r3, [r2, #0]
+ 80008f6:	f443 7300 	orr.w	r3, r3, #512	; 0x200
+ 80008fa:	6013      	str	r3, [r2, #0]
+		delay();
+ 80008fc:	f7ff fc74 	bl	80001e8 <delay>
+		pPortDOutReg->pin_10  = 0X00;  //C2 LOW
+ 8000900:	4a38      	ldr	r2, [pc, #224]	; (80009e4 <side_seq+0x150>)
+ 8000902:	6813      	ldr	r3, [r2, #0]
+ 8000904:	f36f 238a 	bfc	r3, #10, #1
+ 8000908:	6013      	str	r3, [r2, #0]
+		delay();
+ 800090a:	f7ff fc6d 	bl	80001e8 <delay>
+		pPortDOutReg->pin_10  = 0X01;  //C2 HIGH
+ 800090e:	4a35      	ldr	r2, [pc, #212]	; (80009e4 <side_seq+0x150>)
+ 8000910:	6813      	ldr	r3, [r2, #0]
+ 8000912:	f443 6380 	orr.w	r3, r3, #1024	; 0x400
+ 8000916:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000918:	f7ff fc66 	bl	80001e8 <delay>
+		pPortDOutReg->pin_11  = 0X00;  //C3 LOW
+ 800091c:	4a31      	ldr	r2, [pc, #196]	; (80009e4 <side_seq+0x150>)
+ 800091e:	6813      	ldr	r3, [r2, #0]
+ 8000920:	f36f 23cb 	bfc	r3, #11, #1
+ 8000924:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000926:	f7ff fc5f 	bl	80001e8 <delay>
+		pPortDOutReg->pin_11  = 0X01;  //C3 HIGH
+ 800092a:	4a2e      	ldr	r2, [pc, #184]	; (80009e4 <side_seq+0x150>)
+ 800092c:	6813      	ldr	r3, [r2, #0]
+ 800092e:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 8000932:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000934:	f7ff fc58 	bl	80001e8 <delay>
+		/*Right to Left*/
+		pPortDOutReg->pin_11  = 0X00;  //C3 LOW
+ 8000938:	4a2a      	ldr	r2, [pc, #168]	; (80009e4 <side_seq+0x150>)
+ 800093a:	6813      	ldr	r3, [r2, #0]
+ 800093c:	f36f 23cb 	bfc	r3, #11, #1
+ 8000940:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000942:	f7ff fc51 	bl	80001e8 <delay>
+		pPortDOutReg->pin_11  = 0X01;  //C3 HIGH
+ 8000946:	4a27      	ldr	r2, [pc, #156]	; (80009e4 <side_seq+0x150>)
+ 8000948:	6813      	ldr	r3, [r2, #0]
+ 800094a:	f443 6300 	orr.w	r3, r3, #2048	; 0x800
+ 800094e:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000950:	f7ff fc4a 	bl	80001e8 <delay>
+		pPortDOutReg->pin_10  = 0X00;  //C2 LOW
+ 8000954:	4a23      	ldr	r2, [pc, #140]	; (80009e4 <side_seq+0x150>)
+ 8000956:	6813      	ldr	r3, [r2, #0]
+ 8000958:	f36f 238a 	bfc	r3, #10, #1
+ 800095c:	6013      	str	r3, [r2, #0]
+		delay();
+ 800095e:	f7ff fc43 	bl	80001e8 <delay>
+		pPortDOutReg->pin_10  = 0X01;  //C2 HIGH
+ 8000962:	4a20      	ldr	r2, [pc, #128]	; (80009e4 <side_seq+0x150>)
+ 8000964:	6813      	ldr	r3, [r2, #0]
+ 8000966:	f443 6380 	orr.w	r3, r3, #1024	; 0x400
+ 800096a:	6013      	str	r3, [r2, #0]
+		delay();
+ 800096c:	f7ff fc3c 	bl	80001e8 <delay>
+		pPortDOutReg->pin_9   = 0X00;  //C1 LOW
+ 8000970:	4a1c      	ldr	r2, [pc, #112]	; (80009e4 <side_seq+0x150>)
+ 8000972:	6813      	ldr	r3, [r2, #0]
+ 8000974:	f36f 2349 	bfc	r3, #9, #1
+ 8000978:	6013      	str	r3, [r2, #0]
+		delay();
+ 800097a:	f7ff fc35 	bl	80001e8 <delay>
+		pPortDOutReg->pin_9   = 0X01;  //C1 HIGH
+ 800097e:	4a19      	ldr	r2, [pc, #100]	; (80009e4 <side_seq+0x150>)
+ 8000980:	6813      	ldr	r3, [r2, #0]
+ 8000982:	f443 7300 	orr.w	r3, r3, #512	; 0x200
+ 8000986:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000988:	f7ff fc2e 	bl	80001e8 <delay>
+		pPortDOutReg->pin_8   = 0X00;  //C0 LOW
+ 800098c:	4a15      	ldr	r2, [pc, #84]	; (80009e4 <side_seq+0x150>)
+ 800098e:	6813      	ldr	r3, [r2, #0]
+ 8000990:	f36f 2308 	bfc	r3, #8, #1
+ 8000994:	6013      	str	r3, [r2, #0]
+		delay();
+ 8000996:	f7ff fc27 	bl	80001e8 <delay>
+		pPortDOutReg->pin_8   = 0X01;  //C0 HIGH
+ 800099a:	4a12      	ldr	r2, [pc, #72]	; (80009e4 <side_seq+0x150>)
+ 800099c:	6813      	ldr	r3, [r2, #0]
+ 800099e:	f443 7380 	orr.w	r3, r3, #256	; 0x100
+ 80009a2:	6013      	str	r3, [r2, #0]
+		delay();
+ 80009a4:	f7ff fc20 	bl	80001e8 <delay>
+		count2++;
+ 80009a8:	79fb      	ldrb	r3, [r7, #7]
+ 80009aa:	3301      	adds	r3, #1
+ 80009ac:	71fb      	strb	r3, [r7, #7]
+	while(count2 <= 5){
+ 80009ae:	79fb      	ldrb	r3, [r7, #7]
+ 80009b0:	2b05      	cmp	r3, #5
+ 80009b2:	d989      	bls.n	80008c8 <side_seq+0x34>
+	}
+
+	pPortDOutReg->pin_0  = 0X00;  //R0 LOW
+ 80009b4:	4a0b      	ldr	r2, [pc, #44]	; (80009e4 <side_seq+0x150>)
+ 80009b6:	6813      	ldr	r3, [r2, #0]
+ 80009b8:	f36f 0300 	bfc	r3, #0, #1
+ 80009bc:	6013      	str	r3, [r2, #0]
+	pPortDOutReg->pin_1  = 0X00;  //R1 LOW
+ 80009be:	4a09      	ldr	r2, [pc, #36]	; (80009e4 <side_seq+0x150>)
+ 80009c0:	6813      	ldr	r3, [r2, #0]
+ 80009c2:	f36f 0341 	bfc	r3, #1, #1
+ 80009c6:	6013      	str	r3, [r2, #0]
+	pPortDOutReg->pin_2  = 0X00;  //R2 LOW
+ 80009c8:	4a06      	ldr	r2, [pc, #24]	; (80009e4 <side_seq+0x150>)
+ 80009ca:	6813      	ldr	r3, [r2, #0]
+ 80009cc:	f36f 0382 	bfc	r3, #2, #1
+ 80009d0:	6013      	str	r3, [r2, #0]
+	pPortDOutReg->pin_3  = 0X00;  //R3 LOW
+ 80009d2:	4a04      	ldr	r2, [pc, #16]	; (80009e4 <side_seq+0x150>)
+ 80009d4:	6813      	ldr	r3, [r2, #0]
+ 80009d6:	f36f 03c3 	bfc	r3, #3, #1
+ 80009da:	6013      	str	r3, [r2, #0]
+}
+ 80009dc:	bf00      	nop
+ 80009de:	3708      	adds	r7, #8
+ 80009e0:	46bd      	mov	sp, r7
+ 80009e2:	bd80      	pop	{r7, pc}
+ 80009e4:	40020c14 	.word	0x40020c14
+
+080009e8 <Reset_Handler>:
+
+  .section .text.Reset_Handler
+  .weak Reset_Handler
+  .type Reset_Handler, %function
+Reset_Handler:
+  ldr   r0, =_estack
+ 80009e8:	480d      	ldr	r0, [pc, #52]	; (8000a20 <LoopForever+0x2>)
+  mov   sp, r0          /* set stack pointer */
+ 80009ea:	4685      	mov	sp, r0
+/* Call the clock system intitialization function.*/
+  bl  SystemInit
+ 80009ec:	f3af 8000 	nop.w
+
+/* Copy the data segment initializers from flash to SRAM */
+  ldr r0, =_sdata
+ 80009f0:	480c      	ldr	r0, [pc, #48]	; (8000a24 <LoopForever+0x6>)
+  ldr r1, =_edata
+ 80009f2:	490d      	ldr	r1, [pc, #52]	; (8000a28 <LoopForever+0xa>)
+  ldr r2, =_sidata
+ 80009f4:	4a0d      	ldr	r2, [pc, #52]	; (8000a2c <LoopForever+0xe>)
+  movs r3, #0
+ 80009f6:	2300      	movs	r3, #0
+  b LoopCopyDataInit
+ 80009f8:	e002      	b.n	8000a00 <LoopCopyDataInit>
+
+080009fa <CopyDataInit>:
+
+CopyDataInit:
+  ldr r4, [r2, r3]
+ 80009fa:	58d4      	ldr	r4, [r2, r3]
+  str r4, [r0, r3]
+ 80009fc:	50c4      	str	r4, [r0, r3]
+  adds r3, r3, #4
+ 80009fe:	3304      	adds	r3, #4
+
+08000a00 <LoopCopyDataInit>:
+
+LoopCopyDataInit:
+  adds r4, r0, r3
+ 8000a00:	18c4      	adds	r4, r0, r3
+  cmp r4, r1
+ 8000a02:	428c      	cmp	r4, r1
+  bcc CopyDataInit
+ 8000a04:	d3f9      	bcc.n	80009fa <CopyDataInit>
+
+/* Zero fill the bss segment. */
+  ldr r2, =_sbss
+ 8000a06:	4a0a      	ldr	r2, [pc, #40]	; (8000a30 <LoopForever+0x12>)
+  ldr r4, =_ebss
+ 8000a08:	4c0a      	ldr	r4, [pc, #40]	; (8000a34 <LoopForever+0x16>)
+  movs r3, #0
+ 8000a0a:	2300      	movs	r3, #0
+  b LoopFillZerobss
+ 8000a0c:	e001      	b.n	8000a12 <LoopFillZerobss>
+
+08000a0e <FillZerobss>:
+
+FillZerobss:
+  str  r3, [r2]
+ 8000a0e:	6013      	str	r3, [r2, #0]
+  adds r2, r2, #4
+ 8000a10:	3204      	adds	r2, #4
+
+08000a12 <LoopFillZerobss>:
+
+LoopFillZerobss:
+  cmp r2, r4
+ 8000a12:	42a2      	cmp	r2, r4
+  bcc FillZerobss
+ 8000a14:	d3fb      	bcc.n	8000a0e <FillZerobss>
+
+/* Call static constructors */
+  bl __libc_init_array
+ 8000a16:	f000 f811 	bl	8000a3c <__libc_init_array>
+/* Call the application's entry point.*/
+  bl main
+ 8000a1a:	f7ff fbfb 	bl	8000214 <main>
+
+08000a1e <LoopForever>:
+
+LoopForever:
+    b LoopForever
+ 8000a1e:	e7fe      	b.n	8000a1e <LoopForever>
+  ldr   r0, =_estack
+ 8000a20:	20020000 	.word	0x20020000
+  ldr r0, =_sdata
+ 8000a24:	20000000 	.word	0x20000000
+  ldr r1, =_edata
+ 8000a28:	20000000 	.word	0x20000000
+  ldr r2, =_sidata
+ 8000a2c:	08000aa4 	.word	0x08000aa4
+  ldr r2, =_sbss
+ 8000a30:	20000000 	.word	0x20000000
+  ldr r4, =_ebss
+ 8000a34:	2000001c 	.word	0x2000001c
+
+08000a38 <ADC_IRQHandler>:
+ * @retval : None
+*/
+  .section .text.Default_Handler,"ax",%progbits
+Default_Handler:
+Infinite_Loop:
+  b Infinite_Loop
+ 8000a38:	e7fe      	b.n	8000a38 <ADC_IRQHandler>
+	...
+
+08000a3c <__libc_init_array>:
+ 8000a3c:	b570      	push	{r4, r5, r6, lr}
+ 8000a3e:	4e0d      	ldr	r6, [pc, #52]	; (8000a74 <__libc_init_array+0x38>)
+ 8000a40:	4c0d      	ldr	r4, [pc, #52]	; (8000a78 <__libc_init_array+0x3c>)
+ 8000a42:	1ba4      	subs	r4, r4, r6
+ 8000a44:	10a4      	asrs	r4, r4, #2
+ 8000a46:	2500      	movs	r5, #0
+ 8000a48:	42a5      	cmp	r5, r4
+ 8000a4a:	d109      	bne.n	8000a60 <__libc_init_array+0x24>
+ 8000a4c:	4e0b      	ldr	r6, [pc, #44]	; (8000a7c <__libc_init_array+0x40>)
+ 8000a4e:	4c0c      	ldr	r4, [pc, #48]	; (8000a80 <__libc_init_array+0x44>)
+ 8000a50:	f000 f818 	bl	8000a84 <_init>
+ 8000a54:	1ba4      	subs	r4, r4, r6
+ 8000a56:	10a4      	asrs	r4, r4, #2
+ 8000a58:	2500      	movs	r5, #0
+ 8000a5a:	42a5      	cmp	r5, r4
+ 8000a5c:	d105      	bne.n	8000a6a <__libc_init_array+0x2e>
+ 8000a5e:	bd70      	pop	{r4, r5, r6, pc}
+ 8000a60:	f856 3025 	ldr.w	r3, [r6, r5, lsl #2]
+ 8000a64:	4798      	blx	r3
+ 8000a66:	3501      	adds	r5, #1
+ 8000a68:	e7ee      	b.n	8000a48 <__libc_init_array+0xc>
+ 8000a6a:	f856 3025 	ldr.w	r3, [r6, r5, lsl #2]
+ 8000a6e:	4798      	blx	r3
+ 8000a70:	3501      	adds	r5, #1
+ 8000a72:	e7f2      	b.n	8000a5a <__libc_init_array+0x1e>
+ 8000a74:	08000a9c 	.word	0x08000a9c
+ 8000a78:	08000a9c 	.word	0x08000a9c
+ 8000a7c:	08000a9c 	.word	0x08000a9c
+ 8000a80:	08000aa0 	.word	0x08000aa0
+
+08000a84 <_init>:
+ 8000a84:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8000a86:	bf00      	nop
+ 8000a88:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 8000a8a:	bc08      	pop	{r3}
+ 8000a8c:	469e      	mov	lr, r3
+ 8000a8e:	4770      	bx	lr
+
+08000a90 <_fini>:
+ 8000a90:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8000a92:	bf00      	nop
+ 8000a94:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 8000a96:	bc08      	pop	{r3}
+ 8000a98:	469e      	mov	lr, r3
+ 8000a9a:	4770      	bx	lr
