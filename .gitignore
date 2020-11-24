@@ -1,6 +1,7 @@
 .settings/
-Debug/Src
-Debug/Startup
+*.d
+*.o
+*.su
 objects.list
 *.bin
 *makefile
